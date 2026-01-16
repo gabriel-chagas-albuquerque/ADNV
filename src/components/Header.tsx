@@ -45,6 +45,15 @@ export default function Header() {
         fetchSettings();
     }, []);
 
+    useEffect(() => {
+        if (settings?.logoUrl) {
+            const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+            if (link) {
+                link.href = settings.logoUrl;
+            }
+        }
+    }, [settings?.logoUrl]);
+
     const toggleTheme = () => {
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         setCurrentTheme(newTheme);
