@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { client } from '../lib/sanity';
 import { SITE_SETTINGS_QUERY } from '../lib/queries';
@@ -18,6 +18,9 @@ export default function Header() {
     const [settings, setSettings] = useState<SiteSettings | null>(null);
     const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const isHome = location.pathname === '/';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -27,6 +30,37 @@ export default function Header() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Effect to handle scrolling to section after navigation
+    useEffect(() => {
+        if (isHome && location.hash) {
+            const id = location.hash.replace('#', '');
+            setTimeout(() => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const headerOffset = 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
+        }
+    }, [isHome, location.hash, location.pathname]);
+
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobileMenuOpen]);
 
     useEffect(() => {
         async function fetchSettings() {
@@ -64,10 +98,11 @@ export default function Header() {
 
     const closeMenu = () => setIsMobileMenuOpen(false);
 
-    // Scroll to section logic if on home page
+    // Scroll to section logic
     const scrollToSection = (id: string) => {
         closeMenu();
-        if (location.pathname !== '/') {
+        if (!isHome) {
+            navigate(`/#${id}`);
             return;
         }
 
@@ -88,7 +123,8 @@ export default function Header() {
     const siteName = settings?.title || 'ADNV';
 
     return (
-        <header className={`header ${isScrolled ? 'scrolled' : ''} `}>
+        <header className={`header ${(!isHome || isScrolled) ? 'scrolled' : ''} `}>
+
             <div className="container header-container">
                 <Link to="/" className="logo" onClick={closeMenu}>
                     <img src={logoSrc} alt={siteName} className="header-logo-image" />
@@ -123,7 +159,13 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Navigation Overlay */}
+                <div
+                    className={`mobile-nav-overlay ${isMobileMenuOpen ? 'visible' : ''}`}
+                    onClick={closeMenu}
+                />
+
                 <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+
                     <Link to="/" onClick={() => { closeMenu(); window.scrollTo(0, 0); }}>Início</Link>
                     <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>Sobre Nós</a>
                     <a href="#locations" onClick={(e) => { e.preventDefault(); scrollToSection('locations'); }}>Nossas Igrejas</a>

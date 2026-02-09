@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Clock, Users, MessageCircle } from 'lucide-react';
+import LoadingSpinner from '../components/LoadingSpinner';
+
 import { client } from '../lib/sanity';
 import { UNIT_BY_SLUG_QUERY } from '../lib/queries';
 
@@ -73,14 +75,9 @@ export default function UnitPage() {
     }, [loading, unit]);
 
     if (loading) {
-        return (
-            <div className="unit-page">
-                <div className="container py-5 text-center">
-                    <p>Carregando...</p>
-                </div>
-            </div>
-        );
+        return <LoadingSpinner />;
     }
+
 
     if (!unit) {
         return (

@@ -4,6 +4,8 @@ import '../index.css';
 
 interface CarouselItem {
     image: string;
+    videoUrl?: string;
+    mediaType?: 'image' | 'video';
     title?: string;
     subtitle?: string;
 }
@@ -30,11 +32,13 @@ export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselPro
     };
 
     useEffect(() => {
-        if (isPaused) return;
+        const currentItem = items[currentIndex];
+        // Don't auto-advance if it's a video slide and it's playing
+        if (isPaused || currentItem?.mediaType === 'video') return;
 
         const interval = setInterval(nextSlide, autoPlayInterval);
         return () => clearInterval(interval);
-    }, [isPaused, nextSlide, autoPlayInterval]);
+    }, [isPaused, nextSlide, autoPlayInterval, items, currentIndex]);
 
     if (!items.length) return null;
 
@@ -50,7 +54,23 @@ export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselPro
             >
                 {items.map((item, index) => (
                     <div key={index} className="carousel-item">
-                        <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
+                        {item.mediaType === 'video' && item.videoUrl ? (
+                            <video
+                                src={item.videoUrl}
+                                poster={item.image}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="carousel-video"
+                                onPlay={() => setIsPaused(true)}
+                                onEnded={() => {
+                                    if (index === currentIndex) nextSlide();
+                                }}
+                            />
+                        ) : (
+                            <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
+                        )}
                         {/* Overlay Gradient */}
                         <div className="carousel-overlay"></div>
 
@@ -63,6 +83,7 @@ export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselPro
                     </div>
                 ))}
             </div>
+
 
             <button className="carousel-control prev" onClick={prevSlide} aria-label="Previous slide">
                 <ChevronLeft size={32} />

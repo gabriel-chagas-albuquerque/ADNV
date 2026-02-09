@@ -14,6 +14,7 @@ interface SiteSettings {
     contactPhone?: string;
     contactEmail?: string;
     address?: string;
+    footerDescription?: string;
     socialLinks?: SocialLink[];
 }
 
@@ -57,8 +58,9 @@ export default function Footer() {
             <div className="container footer-content">
                 <div className="footer-section">
                     <h3>{settings?.title || 'ADNV'}</h3>
-                    <p>Levando a palavra de Deus a todos os corações.</p>
+                    <p>{settings?.footerDescription || 'Levando a palavra de Deus a todos os corações.'}</p>
                     <div className="social-links">
+
                         {settings?.socialLinks?.map((link, index) => (
                             <a key={index} href={link.url} aria-label={link.platform} target="_blank" rel="noopener noreferrer">
                                 {getSocialIcon(link.platform)}

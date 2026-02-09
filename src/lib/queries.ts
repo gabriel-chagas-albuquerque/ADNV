@@ -7,9 +7,12 @@ export const CAROUSEL_QUERY = defineQuery(/* groq */ `
     order,
     title,
     description,
+    mediaType,
     "imageUrl": image.asset->url,
+    "videoUrl": video.asset->url,
     link
   }
+
 `);
 
 // All Units Query
@@ -61,9 +64,30 @@ export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `
     contactPhone,
     contactEmail,
     address,
+    radioUrl,
+    footerDescription,
     socialLinks[] {
       platform,
       url
     }
   }
 `);
+
+// Mission Project Query
+export const MISSION_PROJECT_QUERY = defineQuery(/* groq */ `
+  *[_type == "missionProject"][0] {
+    _id,
+    title,
+    subtitle,
+    badge,
+    contentTitle,
+    description,
+    stats[] {
+      iconName,
+      label,
+      value,
+      suffix
+    }
+  }
+`);
+

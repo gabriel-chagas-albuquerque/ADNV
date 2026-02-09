@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import Carousel from '../components/Carousel';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+import MissionProject from '../components/MissionProject';
 import LocationCard from '../components/LocationCard';
+
 import { Target, Heart, Users } from 'lucide-react';
 import { client } from '../lib/sanity';
 import { CAROUSEL_QUERY, UNITS_QUERY, SITE_SETTINGS_QUERY } from '../lib/queries';
@@ -10,8 +14,11 @@ interface CarouselItem {
     title: string;
     description: string;
     imageUrl: string;
+    videoUrl?: string;
+    mediaType?: 'image' | 'video';
     link?: string;
 }
+
 
 interface Unit {
     _id: string;
@@ -79,22 +86,20 @@ export default function Home() {
     }, [loading]);
 
     if (loading) {
-        return (
-            <div className="home-page">
-                <div className="container py-5 text-center">
-                    <p>Carregando...</p>
-                </div>
-            </div>
-        );
+        return <LoadingSpinner />;
     }
+
 
     return (
         <div className="home-page">
             <Carousel items={carouselItems.map(item => ({
                 image: item.imageUrl,
+                videoUrl: item.videoUrl,
+                mediaType: item.mediaType,
                 title: item.title,
                 subtitle: item.description
             }))} />
+
 
             <section id="about" className="section bg-surface">
                 <div className="container">
@@ -148,7 +153,10 @@ export default function Home() {
                 </div>
             </section>
 
+            <MissionProject />
+
             <section id="locations" className="section">
+
                 <div className="container">
                     <div className="section-header text-center reveal">
                         <h2 className="section-title text-gradient glitch-title" data-text="Nossas Igrejas">Nossas Igrejas</h2>
