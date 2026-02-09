@@ -34,7 +34,7 @@ export default function RadioWidget() {
                     <span className="live-pulse"></span>
                 </div>
                 <div className="radio-text">
-                    <span className="radio-title">Rádio Web</span>
+                    <span className="radio-title">Rádio Novo Viver</span>
                     <span className="radio-status">OUÇA AGORA</span>
                 </div>
             </div>
