@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# ADNV - Assembléia de Deus em Nova Vida
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é o repositório oficial do site da **Assembléia de Deus em Nova Vida (ADNV)**. O projeto consiste em uma plataforma moderna e responsiva para gerenciar a presença digital da igreja, integrando um frontend dinâmico com um painel de administração (CMS) robusto.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-## React Compiler
+- **Frontend**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Estilização**: [Tailwind CSS](https://tailwindcss.com/)
+- **CMS (Gerenciamento de Conteúdo)**: [Sanity.io](https://www.sanity.io/)
+- **Ícones**: [Lucide React](https://lucide.dev/)
+- **Navegação**: [React Router DOM](https://reactrouter.com/)
+- **Analytics**: [Vercel Speed Insights](https://vercel.com/docs/analytics/speed-insights)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Funcionalidades
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Carrossel Dinâmico**: Suporte para imagens e vídeos (incluindo YouTube) gerenciados via CMS.
+- **Tema Customizável**: Cores primárias, secundárias e modo de tema (claro/escuro) configuráveis diretamente pelo Sanity.
+- **Gerenciamento de Unidades**: Páginas dedicadas para cada sede/congregação da igreja, com horários, eventos e links sociais.
+- **Projetos de Missão**: Seção detalhada para apresentar a visão, missão e valores da organização, além de projetos específicos.
+- **Rádio Online**: Widget integrado para transmissão de áudio em tempo real.
+- **Configurações Gerais**: Gerenciamento Centralizado de links de redes sociais, informações de contato e SEO.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📂 Estrutura do Projeto
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+O repositório está dividido em duas partes principais:
+
+- `/`: Contém o código do frontend (aplicação React).
+- `/studio-adnv`: Contém a configuração do **Sanity Studio**, onde o conteúdo é gerenciado.
+
+---
+
+## 🛠️ Configuração Local
+
+### Pré-requisitos
+- Node.js instalado.
+- Gerenciador de pacotes (npm ou yarn).
+
+### 1. Clonar o repositório
+```bash
+git clone https://github.com/gabriel-chagas-albuquerque/ADNV.git
+cd ADNV
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Configurar o Frontend
+Instalar dependências:
+```bash
+npm install
 ```
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes chaves (substitua pelos seus valores do Sanity):
+```env
+VITE_SANITY_PROJECT_ID=seu_project_id
+VITE_SANITY_DATASET=production
+```
+
+Rodar em modo de desenvolvimento:
+```bash
+npm run dev
+```
+
+### 3. Configurar o Sanity Studio
+Navegue até a pasta do studio:
+```bash
+cd studio-adnv
+npm install
+```
+
+Rodar o Studio localmente:
+```bash
+npx sanity dev
+```
+O Studio estará disponível em `http://localhost:3333`.
+
+---
+
+## 🎨 Design e Estilo
+
+O projeto utiliza um sistema de design moderno com suporte a temas, animações suaves via CSS/Framer Motion e componentes altamente reutilizáveis. As cores e tipografia foram escolhidas para transmitir a identidade visual da ADNV de forma premium e acolhedora.
+
+## 📄 Licença
+
+Este projeto é de uso restrito à Assembléia de Deus em Nova Vida.

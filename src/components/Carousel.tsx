@@ -5,7 +5,8 @@ import '../index.css';
 interface CarouselItem {
     image: string;
     videoUrl?: string;
-    mediaType?: 'image' | 'video';
+    youtubeUrl?: string;
+    mediaType?: 'image' | 'video' | 'youtube';
     title?: string;
     subtitle?: string;
 }
@@ -13,6 +14,12 @@ interface CarouselItem {
 interface CarouselProps {
     items: CarouselItem[];
     autoPlayInterval?: number;
+}
+
+function getYouTubeId(url: string) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
 }
 
 export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselProps) {
@@ -33,8 +40,8 @@ export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselPro
 
     useEffect(() => {
         const currentItem = items[currentIndex];
-        // Don't auto-advance if it's a video slide and it's playing
-        if (isPaused || currentItem?.mediaType === 'video') return;
+        // Don't auto-advance if it's a video/youtube slide and it's playing
+        if (isPaused || currentItem?.mediaType === 'video' || currentItem?.mediaType === 'youtube') return;
 
         const interval = setInterval(nextSlide, autoPlayInterval);
         return () => clearInterval(interval);
@@ -52,36 +59,62 @@ export default function Carousel({ items, autoPlayInterval = 5000 }: CarouselPro
                 className="carousel-inner"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-                {items.map((item, index) => (
-                    <div key={index} className="carousel-item">
-                        {item.mediaType === 'video' && item.videoUrl ? (
-                            <video
-                                src={item.videoUrl}
-                                poster={item.image}
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                className="carousel-video"
-                                onPlay={() => setIsPaused(true)}
-                                onEnded={() => {
-                                    if (index === currentIndex) nextSlide();
-                                }}
-                            />
-                        ) : (
-                            <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
-                        )}
-                        {/* Overlay Gradient */}
-                        <div className="carousel-overlay"></div>
+                {items.map((item, index) => {
+                    const isActive = index === currentIndex;
+                    const youtubeId = item.youtubeUrl ? getYouTubeId(item.youtubeUrl) : null;
 
-                        {(item.title || item.subtitle) && (
-                            <div className="carousel-caption">
-                                {item.subtitle && <span className="carousel-subtitle">{item.subtitle}</span>}
-                                {item.title && <h2 className="carousel-title">{item.title}</h2>}
-                            </div>
-                        )}
-                    </div>
-                ))}
+                    return (
+                        <div key={index} className="carousel-item">
+                            {item.mediaType === 'youtube' && youtubeId ? (
+                                <div className="carousel-video-container">
+                                    {isActive ? (
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&enablejsapi=1`}
+                                            allow="autoplay; encrypted-media"
+                                            allowFullScreen
+                                            className="carousel-video youtube-frame"
+                                            style={{ pointerEvents: 'none' }}
+                                        />
+                                    ) : (
+                                        <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
+                                    )}
+                                </div>
+                            ) : item.mediaType === 'video' && item.videoUrl ? (
+                                <div className="carousel-video-container">
+                                    {isActive ? (
+                                        <video
+                                            src={item.videoUrl}
+                                            poster={item.image}
+                                            autoPlay
+                                            muted
+                                            loop
+                                            playsInline
+                                            className="carousel-video"
+                                            onPlay={() => setIsPaused(true)}
+                                            onEnded={() => {
+                                                if (isActive) nextSlide();
+                                            }}
+                                        />
+                                    ) : (
+                                        <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
+                                    )}
+                                </div>
+                            ) : (
+                                <img src={item.image} alt={item.title || `Slide ${index + 1}`} />
+                            )}
+                            {/* Overlay Gradient */}
+                            <div className="carousel-overlay"></div>
+
+                            {(item.title || item.subtitle) && (
+                                <div className="carousel-caption">
+                                    {item.subtitle && <span className="carousel-subtitle">{item.subtitle}</span>}
+                                    {item.title && <h2 className="carousel-title">{item.title}</h2>}
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+
             </div>
 
 

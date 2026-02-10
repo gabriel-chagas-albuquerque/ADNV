@@ -15,7 +15,8 @@ interface CarouselItem {
     description: string;
     imageUrl: string;
     videoUrl?: string;
-    mediaType?: 'image' | 'video';
+    youtubeUrl?: string;
+    mediaType?: 'image' | 'video' | 'youtube';
     link?: string;
 }
 
@@ -95,10 +96,12 @@ export default function Home() {
             <Carousel items={carouselItems.map(item => ({
                 image: item.imageUrl,
                 videoUrl: item.videoUrl,
+                youtubeUrl: item.youtubeUrl,
                 mediaType: item.mediaType,
                 title: item.title,
                 subtitle: item.description
             }))} />
+
 
 
             <section id="about" className="section bg-surface">

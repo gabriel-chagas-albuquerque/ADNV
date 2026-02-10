@@ -493,6 +493,27 @@ img {
   object-fit: cover;
 }
 
+.carousel-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.youtube-frame {
+  width: 100%;
+  height: 100%;
+  transform: scale(1.35);
+  /* Scale up to hide controls/info and ensure cover */
+  pointer-events: none;
+  border: none;
+}
+
+
+
 
 .carousel-overlay {
   position: absolute;

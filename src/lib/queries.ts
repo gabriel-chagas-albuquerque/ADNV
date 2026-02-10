@@ -10,7 +10,9 @@ export const CAROUSEL_QUERY = defineQuery(/* groq */ `
     mediaType,
     "imageUrl": image.asset->url,
     "videoUrl": video.asset->url,
+    youtubeUrl,
     link
+
   }
 
 `);
