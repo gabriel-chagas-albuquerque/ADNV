@@ -1,4 +1,4 @@
-# ADNV - Assembléia de Deus em Nova Vida
+# ADNV - Assembléia de Deus em Novo Viver
 
 Este é o repositório oficial do site da **Assembléia de Deus em Novo Viver (ADNV)**. O projeto consiste em uma plataforma moderna e responsiva para gerenciar a presença digital da igreja, integrando um frontend dinâmico com um painel de administração (CMS) robusto.
 
