@@ -19,7 +19,7 @@ export const CAROUSEL_QUERY = defineQuery(/* groq */ `
 
 // All Units Query
 export const UNITS_QUERY = defineQuery(/* groq */ `
-  *[_type == "unit"] | order(name asc) {
+  *[_type == "unit"] | order(select(name == "Sede" => 0, 1) asc, name asc) {
     _id,
     name,
     "slug": slug.current,
